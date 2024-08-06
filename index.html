@@ -66,14 +66,35 @@
         .arrow:hover {
             background: rgba(255, 133, 51, 0.9);
         }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2em;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            cursor: pointer;
+            padding: 20px;
+            border-radius: 50%;
+            z-index: 2;
+            user-select: none;
+            transition: background 0.3s;
+        }
+        .play-button:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
     </style>
 </head>
 <body>
     <div class="video-container">
-        <video id="videoPlayer" autoplay muted playsinline loop>
-            <source id="videoSource" src="videos/video1.mp4" type="video/mp4">
+        <video id="videoPlayer" playsinline loop>
+            <source id="videoSource" src="1.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
+        <button class="play-button" onclick="playVideo()">Play</button>
         <div class="controls">
             <div class="control-panel">
                 <button class="arrow" onclick="prevVideo()">&#9664;</button>
@@ -97,6 +118,9 @@
             const videoSource = document.getElementById('videoSource');
             videoSource.src = videos[currentVideoIndex];
             videoPlayer.load();
+            videoPlayer.play().catch(error => {
+                console.error("Error trying to play video:", error);
+            });
         }
 
         function nextVideo() {
@@ -107,6 +131,15 @@
         function prevVideo() {
             currentVideoIndex = (currentVideoIndex - 1 + videos.length) % videos.length;
             updateVideoSource();
+        }
+
+        function playVideo() {
+            const videoPlayer = document.getElementById('videoPlayer');
+            const playButton = document.querySelector('.play-button');
+            playButton.style.display = 'none';
+            videoPlayer.play().catch(error => {
+                console.error("Error trying to play video:", error);
+            });
         }
     </script>
 </body>
