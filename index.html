@@ -3,31 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Full Screen Video</title>
+    <title>Video Carousel</title>
     <style>
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
-            height: 100%;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
             background: black;
         }
+        .video-container {
+            position: relative;
+            max-width: 100%;
+            max-height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 50%;
+        }
         video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
             object-position: center;
+        }
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 3em;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            cursor: pointer;
+            z-index: 1;
+            user-select: none;
+        }
+        .arrow-left {
+            left: 20px;
+        }
+        .arrow-right {
+            right: 20px;
         }
     </style>
 </head>
 <body>
-    <video autoplay muted loop playsinline>
-        <source src="test.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+    <div class="video-container">
+        <button class="arrow arrow-left" onclick="prevVideo()">&#9664;</button>
+        <video id="videoPlayer" autoplay muted playsinline loop>
+            <source id="videoSource" src="video1.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <button class="arrow arrow-right" onclick="nextVideo()">&#9654;</button>
+    </div>
+
+    <script>
+        const videos = [
+            'test.mp4',
+            'test2.mp4',
+            'test3.mp4',
+            // Добавьте сюда пути к вашим видеофайлам
+        ];
+
+        let currentVideoIndex = 0;
+
+        function updateVideoSource() {
+            const videoPlayer = document.getElementById('videoPlayer');
+            const videoSource = document.getElementById('videoSource');
+            videoSource.src = videos[currentVideoIndex];
+            videoPlayer.load();
+        }
+
+        function nextVideo() {
+            currentVideoIndex = (currentVideoIndex + 1) % videos.length;
+            updateVideoSource();
+        }
+
+        function prevVideo() {
+            currentVideoIndex = (currentVideoIndex - 1 + videos.length) % videos.length;
+            updateVideoSource();
+        }
+    </script>
 </body>
 </html>
